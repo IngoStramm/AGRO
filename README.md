@@ -40,7 +40,7 @@ Default warning format:
 
 ## Commands
 
-Use `/agro config` to open the configuration screen. The same options are also available through slash commands:
+Use `/agro config` or right-click the AGRO indicator to open the movable configuration window. The same options are also available through slash commands:
 
 ```text
 /agro help
@@ -69,7 +69,7 @@ Use `/agro config` to open the configuration screen. The same options are also a
 - Yellow: enabled, but waiting for tank role or a valid tanked target.
 - Gray: disabled.
 
-Left-click the indicator to toggle alerts. Drag it to move. Use `/agro lock` to lock or unlock the indicator.
+Left-click the indicator to toggle alerts. Right-click it to open configuration. Drag it to move. Use `/agro lock` to lock or unlock the indicator.
 
 ## Compatibility
 

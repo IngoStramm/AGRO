@@ -34,7 +34,9 @@ local scanElapsed = 0
 local lastGlobalAlert = 0
 local alertState = {}
 local currentVisualState = nil
+local optionControlSets = {}
 local optionsPanel
+local standalonePanel
 local standaloneOptions
 
 local function CopyDefaults(defaults, target)
@@ -373,7 +375,7 @@ local function EnsureIndicator()
     end)
     frame:SetScript("OnClick", function(_, button)
         if button == "RightButton" then
-            Print(db.enabled and L.enabled or L.disabled)
+            AGRO:OpenStandaloneOptions()
         else
             db.enabled = not db.enabled
             alertState = {}
@@ -589,16 +591,13 @@ end
 function AGRO:RefreshOptions()
     EnsureDb()
 
-    local controls = self.optionControls
-    if not controls then
-        return
-    end
-
-    for _, check in ipairs(controls.checks or {}) do
-        check:SetChecked(check.getter() and true or false)
-    end
-    for _, stepper in ipairs(controls.steppers or {}) do
-        stepper:Refresh()
+    for _, controls in ipairs(optionControlSets) do
+        for _, check in ipairs(controls.checks or {}) do
+            check:SetChecked(check.getter() and true or false)
+        end
+        for _, stepper in ipairs(controls.steppers or {}) do
+            stepper:Refresh()
+        end
     end
 end
 
@@ -612,21 +611,20 @@ local function RegisterOptionsPanel(panel)
     end
 end
 
-function AGRO:CreateOptionsPanel()
-    if optionsPanel then
-        return optionsPanel
-    end
-
+function AGRO:BuildOptionsPanel(panelName, register, showTitle)
     EnsureDb()
-    local panel = CreateFrame("Frame", "AGROOptionsPanel")
+    local panel = CreateFrame("Frame", panelName)
     panel.name = "AGRO"
     panel:SetSize(560, 360)
 
-    local title = CreateText(panel, L.optionsTitle, "GameFontNormalLarge")
-    title:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -16)
+    local topOffset = showTitle == false and 0 or -36
+    if showTitle ~= false then
+        local title = CreateText(panel, L.optionsTitle, "GameFontNormalLarge")
+        title:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -16)
+    end
 
     local general = CreateText(panel, L.general, "GameFontNormal")
-    general:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -52)
+    general:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, topOffset - 16)
 
     local checks = {}
     local function AddCheck(label, x, y, getter, setter, tooltip)
@@ -636,30 +634,30 @@ function AGRO:CreateOptionsPanel()
         return check
     end
 
-    AddCheck(L.enableAlerts, 16, -76, function() return db.enabled end, function(value)
+    AddCheck(L.enableAlerts, 16, topOffset - 40, function() return db.enabled end, function(value)
         db.enabled = value
         if not value then
             alertState = {}
         end
     end, L.enableAlertsDesc)
-    AddCheck(L.requireTankRole, 16, -106, function() return db.requireTankRole end, function(value)
+    AddCheck(L.requireTankRole, 16, topOffset - 70, function() return db.requireTankRole end, function(value)
         db.requireTankRole = value
     end, L.requireTankRoleDesc)
-    AddCheck(L.monitorFocus, 16, -136, function() return db.useFocus end, function(value)
+    AddCheck(L.monitorFocus, 16, topOffset - 100, function() return db.useFocus end, function(value)
         db.useFocus = value
         alertState = {}
     end, L.monitorFocusDesc)
-    AddCheck(L.showIndicator, 16, -166, function() return db.showIndicator end, function(value)
+    AddCheck(L.showIndicator, 16, topOffset - 130, function() return db.showIndicator end, function(value)
         db.showIndicator = value
     end, L.showIndicatorDesc)
-    AddCheck(L.lockIndicator, 16, -196, function() return db.indicatorLocked end, function(value)
+    AddCheck(L.lockIndicator, 16, topOffset - 160, function() return db.indicatorLocked end, function(value)
         db.indicatorLocked = value
     end, L.lockIndicatorDesc)
 
     local announce = CreateText(panel, L.announce, "GameFontNormal")
-    announce:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -52)
+    announce:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 16)
 
-    AddCheck(L.localOnly, 292, -76, function() return db.output == "local" end, function(value)
+    AddCheck(L.localOnly, 292, topOffset - 40, function() return db.output == "local" end, function(value)
         if value then
             db.output = "local"
         else
@@ -667,7 +665,7 @@ function AGRO:CreateOptionsPanel()
         end
     end, L.localOnlyDesc)
 
-    AddCheck(L.partyRaidChat, 292, -106, function() return db.output == "group" end, function(value)
+    AddCheck(L.partyRaidChat, 292, topOffset - 70, function() return db.output == "group" end, function(value)
         if value then
             db.output = "group"
         else
@@ -676,7 +674,7 @@ function AGRO:CreateOptionsPanel()
     end, L.partyRaidChatDesc)
 
     local thresholds = CreateText(panel, L.thresholds, "GameFontNormal")
-    thresholds:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -142)
+    thresholds:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 106)
 
     local steppers = {}
     local threshold = CreateStepper(panel, L.warningThreshold, "threshold", 80, 99, 1, "%", function(value)
@@ -684,7 +682,7 @@ function AGRO:CreateOptionsPanel()
             db.resetThreshold = math.max(50, value - 15)
         end
     end, L.warningThresholdDesc)
-    threshold:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -166)
+    threshold:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 130)
     steppers[#steppers + 1] = threshold
 
     local reset = CreateStepper(panel, L.resetThreshold, "resetThreshold", 50, 95, 1, "%", function(value)
@@ -692,23 +690,23 @@ function AGRO:CreateOptionsPanel()
             db.threshold = math.min(99, value + 1)
         end
     end, L.resetThresholdDesc)
-    reset:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -198)
+    reset:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 162)
     steppers[#steppers + 1] = reset
 
     local globalDelay = CreateStepper(panel, L.globalDelay, "globalCooldown", 3, 60, 1, " " .. L.seconds, nil, L.globalDelayDesc)
-    globalDelay:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -230)
+    globalDelay:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 194)
     steppers[#steppers + 1] = globalDelay
 
     local playerCooldown = CreateStepper(panel, L.playerCooldown, "playerCooldown", 5, 120, 5, " " .. L.seconds, nil, L.playerCooldownDesc)
-    playerCooldown:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, -262)
+    playerCooldown:SetPoint("TOPLEFT", panel, "TOPLEFT", 292, topOffset - 226)
     steppers[#steppers + 1] = playerCooldown
 
     local resetButton = CreateButton(panel, L.resetDefaults, 130)
-    resetButton:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -250)
+    resetButton:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, topOffset - 214)
     resetButton:SetScript("OnClick", ResetDefaults)
     AddTooltip(resetButton, L.resetDefaults, L.resetDefaultsDesc)
 
-    self.optionControls = {
+    optionControlSets[#optionControlSets + 1] = {
         checks = checks,
         steppers = steppers,
     }
@@ -717,10 +715,29 @@ function AGRO:CreateOptionsPanel()
         AGRO:RefreshOptions()
     end)
 
-    optionsPanel = panel
-    RegisterOptionsPanel(panel)
+    if register then
+        RegisterOptionsPanel(panel)
+    end
     self:RefreshOptions()
     return panel
+end
+
+function AGRO:CreateOptionsPanel()
+    if optionsPanel then
+        return optionsPanel
+    end
+
+    optionsPanel = self:BuildOptionsPanel("AGROOptionsPanel", true, true)
+    return optionsPanel
+end
+
+function AGRO:CreateStandalonePanel()
+    if standalonePanel then
+        return standalonePanel
+    end
+
+    standalonePanel = self:BuildOptionsPanel("AGROStandaloneOptionsPanelContent", false, false)
+    return standalonePanel
 end
 
 local function SaveStandalonePosition(frame)
@@ -732,20 +749,8 @@ local function SaveStandalonePosition(frame)
     db.configY = y
 end
 
-function AGRO:OpenOptions()
-    local panel = self:CreateOptionsPanel()
-
-    if Settings and Settings.OpenToCategory and self.settingsCategory then
-        Settings.OpenToCategory(self.settingsCategory.ID or self.settingsCategory)
-        self:RefreshOptions()
-        return
-    elseif InterfaceOptionsFrame_OpenToCategory and panel then
-        InterfaceOptionsFrame_OpenToCategory(panel)
-        InterfaceOptionsFrame_OpenToCategory(panel)
-        self:RefreshOptions()
-        return
-    end
-
+function AGRO:OpenStandaloneOptions()
+    local panel = self:CreateStandalonePanel()
     if not standaloneOptions then
         local frame = CreateFrame("Frame", "AGROStandaloneOptionsFrame", UIParent, "BackdropTemplate")
         frame:SetSize(600, 410)
@@ -774,6 +779,9 @@ function AGRO:OpenOptions()
         end)
         frame:Hide()
 
+        local title = CreateText(frame, L.optionsTitle, "GameFontNormalLarge")
+        title:SetPoint("TOPLEFT", frame, "TOPLEFT", 18, -10)
+
         local close = CreateButton(frame, L.close, 80)
         close:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -18, 18)
         close:SetScript("OnClick", function()
@@ -789,11 +797,15 @@ function AGRO:OpenOptions()
 
     panel:SetParent(standaloneOptions)
     panel:ClearAllPoints()
-    panel:SetPoint("TOPLEFT", standaloneOptions, "TOPLEFT", 18, -18)
+    panel:SetPoint("TOPLEFT", standaloneOptions, "TOPLEFT", 18, -30)
     panel:Show()
     standaloneOptions:Show()
     standaloneOptions:Raise()
     self:RefreshOptions()
+end
+
+function AGRO:OpenOptions()
+    self:OpenStandaloneOptions()
 end
 
 local function SlashHandler(message)
