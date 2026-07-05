@@ -192,26 +192,20 @@ local function IsCandidate(unit)
 end
 
 local function GetOutputChannel()
-    if db.output ~= "group" then
-        return nil
-    end
-    if IsInRaid and IsInRaid() then
+    if db.output == "group" and IsInRaid and IsInRaid() then
         return "RAID"
     end
-    if IsInGroup and IsInGroup() then
+    if db.output == "group" and IsInGroup and IsInGroup() then
         return "PARTY"
     end
-    return nil
+    return "SAY"
 end
 
-local function SendWarning(playerName, targetName)
-    local message = L.warning:format(playerName, targetName)
+local function SendWarning(playerName, threatpct)
+    local roundedThreat = math.floor((threatpct or db.threshold or 0) + 0.5)
+    local message = L.warning:format(playerName, roundedThreat)
     local channel = GetOutputChannel()
-    if channel then
-        SendChatMessage(message, channel)
-    else
-        Print(message)
-    end
+    SendChatMessage(message, channel)
 end
 
 local function CanAlert(state, now)
@@ -264,7 +258,7 @@ local function EvaluateUnit(source, target)
     if threatpct >= db.threshold then
         local now = GetTime()
         if CanAlert(state, now) then
-            SendWarning(UnitShortName(source), GetTargetName(target))
+            SendWarning(UnitShortName(source), threatpct)
             MarkAlert(state, now)
         end
     end
@@ -878,7 +872,7 @@ local function SlashHandler(message)
         db.indicatorLocked = not db.indicatorLocked
         Print(db.indicatorLocked and L.locked or L.unlocked)
     elseif command == "test" then
-        SendWarning(UnitName("player") or "Player", UnitName("target") or "target")
+        SendWarning(UnitName("player") or "Player", db.threshold)
     else
         PrintHelp()
     end

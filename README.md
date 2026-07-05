@@ -29,8 +29,14 @@ Do not use GitHub's green **Code > Download ZIP** button for installation. That 
 - Monitors `target` and `focus`.
 - Warns at 90% weighted threat.
 - Rearms after the player drops below 75%.
-- Prints warnings locally by default.
+- Sends warnings to `/say` by default.
 - Uses an 8 second global delay and a 30 second per-player cooldown.
+
+Default warning format:
+
+```text
+Playername: 90%+ threat
+```
 
 ## Commands
 
