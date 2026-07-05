@@ -3,7 +3,7 @@
 ## Notes: Warns when a group member is close to pulling threat from your active tank target.
 ## Notes-ptBR: Avisa quando um membro do grupo esta perto de puxar ameaca do seu alvo tankado.
 ## Author: Ingo Stramm
-## Version: 0.1.1
+## Version: 0.1.2
 ## SavedVariablesPerCharacter: AGRODB
 ## DefaultState: enabled
 

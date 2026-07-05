@@ -35,7 +35,7 @@ if GetLocale and GetLocale() == "ptBR" then
         playerSet = "Cooldown por jogador definido para %d segundos.",
         locked = "indicador travado.",
         unlocked = "indicador destravado.",
-        warning = "%s: %d%%+ threat",
+        warning = "{skull} %s: %d%%+ threat",
         noThreatApi = "UnitDetailedThreatSituation nao esta disponivel.",
         tankRoleMissing = "ativado, aguardando role tank.",
         noTarget = "ativado, sem alvo tankado valido.",

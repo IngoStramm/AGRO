@@ -35,7 +35,7 @@ Do not use GitHub's green **Code > Download ZIP** button for installation. That 
 Default warning format:
 
 ```text
-Playername: 90%+ threat
+{skull} Playername: 90%+ threat
 ```
 
 ## Commands
