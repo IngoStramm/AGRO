@@ -752,24 +752,18 @@ end
 function AGRO:OpenStandaloneOptions()
     local panel = self:CreateStandalonePanel()
     if not standaloneOptions then
-        local frame = CreateFrame("Frame", "AGROStandaloneOptionsFrame", UIParent, "BackdropTemplate")
-        frame:SetSize(600, 410)
+        local ok, frame = pcall(CreateFrame, "Frame", "AGROStandaloneOptionsFrame", UIParent, "BasicFrameTemplateWithInset")
+        if not ok then
+            frame = CreateFrame("Frame", "AGROStandaloneOptionsFrame", UIParent)
+        end
+        frame:SetSize(680, 430)
         frame:SetPoint(db.configPoint or "CENTER", UIParent, db.configRelativePoint or "CENTER", db.configX or 0, db.configY or 0)
-        frame:SetFrameStrata("DIALOG")
-        frame:SetMovable(true)
+        frame:SetFrameStrata("FULLSCREEN_DIALOG")
+        frame:SetToplevel(true)
         frame:EnableMouse(true)
+        frame:SetMovable(true)
         frame:RegisterForDrag("LeftButton")
         frame:SetClampedToScreen(true)
-        frame:SetBackdrop({
-            bgFile = "Interface\\Buttons\\WHITE8X8",
-            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-            tile = true,
-            tileSize = 16,
-            edgeSize = 12,
-            insets = {left = 3, right = 3, top = 3, bottom = 3},
-        })
-        frame:SetBackdropColor(0, 0, 0, 1)
-        frame:SetBackdropBorderColor(0.45, 0.42, 0.28, 1)
         frame:SetScript("OnDragStart", function(self)
             self:StartMoving()
         end)
@@ -779,14 +773,13 @@ function AGRO:OpenStandaloneOptions()
         end)
         frame:Hide()
 
-        local title = CreateText(frame, L.optionsTitle, "GameFontNormalLarge")
-        title:SetPoint("TOPLEFT", frame, "TOPLEFT", 18, -10)
+        local title = CreateText(frame, "AGRO", "GameFontHighlight")
+        title:SetPoint("TOP", frame, "TOP", 0, -6)
 
-        local close = CreateButton(frame, L.close, 80)
-        close:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -18, 18)
-        close:SetScript("OnClick", function()
-            frame:Hide()
-        end)
+        local content = CreateFrame("Frame", nil, frame)
+        content:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -32)
+        content:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 16)
+        frame.content = content
 
         if UISpecialFrames then
             UISpecialFrames[#UISpecialFrames + 1] = "AGROStandaloneOptionsFrame"
@@ -795,9 +788,10 @@ function AGRO:OpenStandaloneOptions()
         standaloneOptions = frame
     end
 
-    panel:SetParent(standaloneOptions)
+    panel:SetParent(standaloneOptions.content)
     panel:ClearAllPoints()
-    panel:SetPoint("TOPLEFT", standaloneOptions, "TOPLEFT", 18, -30)
+    panel:SetPoint("TOPLEFT", standaloneOptions.content, "TOPLEFT", 0, 0)
+    panel:SetSize(640, 360)
     panel:Show()
     standaloneOptions:Show()
     standaloneOptions:Raise()
