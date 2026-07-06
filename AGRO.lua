@@ -761,15 +761,15 @@ function AGRO:OpenStandaloneOptions()
         frame:RegisterForDrag("LeftButton")
         frame:SetClampedToScreen(true)
         frame:SetBackdrop({
-            bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+            bgFile = "Interface\\Buttons\\WHITE8X8",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
             tile = true,
             tileSize = 16,
             edgeSize = 12,
             insets = {left = 3, right = 3, top = 3, bottom = 3},
         })
-        frame:SetBackdropColor(0.03, 0.03, 0.04, 0.94)
-        frame:SetBackdropBorderColor(0.45, 0.42, 0.28, 0.9)
+        frame:SetBackdropColor(0, 0, 0, 1)
+        frame:SetBackdropBorderColor(0.45, 0.42, 0.28, 1)
         frame:SetScript("OnDragStart", function(self)
             self:StartMoving()
         end)
