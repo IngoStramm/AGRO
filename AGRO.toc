@@ -1,4 +1,4 @@
-## Interface: 20505
+## Interface: 20506
 ## Title: AGRO - Aggro Guard and Raid Observer
 ## Notes: Warns when a group member is close to pulling threat from your active tank target.
 ## Notes-deDE: Warnt, wenn ein Gruppenmitglied kurz davor ist, Bedrohung von deinem getankten Ziel zu ziehen.
@@ -12,7 +12,7 @@
 ## Notes-zhCN: 当队伍成员即将从你正在坦克的目标上抢走仇恨时发出警告。
 ## Notes-zhTW: 當隊伍成員即將從你正在坦克的目標上搶走仇恨時發出警告。
 ## Author: Ingo Stramm
-## Version: 0.1.7
+## Version: 0.1.8
 ## X-Curse-Project-ID: 1601288
 ## SavedVariablesPerCharacter: AGRODB
 ## DefaultState: enabled

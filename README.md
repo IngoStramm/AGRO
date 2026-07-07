@@ -76,10 +76,10 @@ Left-click the indicator to toggle alerts. Right-click it to open configuration.
 
 ## Compatibility
 
-Built for WoW TBC Classic Anniversary client:
+Built for WoW TBC Classic Anniversary client 2.5.6:
 
 ```text
-Interface: 20505
+Interface: 20506
 ```
 
 ## Changelog

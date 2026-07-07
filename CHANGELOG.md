@@ -1,5 +1,4 @@
-## 0.1.7
+## 0.1.8
 
-- Prepared CurseForge automatic packaging through GitHub tags.
-- Added CurseForge project assets and package metadata.
-- No addon behavior changes from 0.1.6.
+- Updated the TOC Interface for WoW TBC Classic Anniversary client 2.5.6.
+- No addon behavior changes from 0.1.7.
