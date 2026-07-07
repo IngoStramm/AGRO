@@ -12,7 +12,8 @@
 ## Notes-zhCN: 当队伍成员即将从你正在坦克的目标上抢走仇恨时发出警告。
 ## Notes-zhTW: 當隊伍成員即將從你正在坦克的目標上搶走仇恨時發出警告。
 ## Author: Ingo Stramm
-## Version: 0.1.6
+## Version: 0.1.7
+## X-Curse-Project-ID: 1601288
 ## SavedVariablesPerCharacter: AGRODB
 ## DefaultState: enabled
 

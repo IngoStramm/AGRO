@@ -47,3 +47,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: AGRO.zip
+          body_path: CHANGELOG.md

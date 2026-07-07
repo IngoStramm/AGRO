@@ -1,5 +1,7 @@
 # AGRO - Aggro Guard and Raid Observer
 
+![AGRO logo](assets/agro-logo-400.png)
+
 AGRO warns when a non-tank group member is close to pulling threat from the target you are actively tanking.
 
 It is built for World of Warcraft Classic TBC Anniversary.
@@ -79,3 +81,7 @@ Built for WoW TBC Classic Anniversary client:
 ```text
 Interface: 20505
 ```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).

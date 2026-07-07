@@ -1,0 +1,14 @@
+package-as: AGRO
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+ignore:
+  - README.md
+  - CHANGELOG.md
+  - assets
+  - .github
+  - scripts
+  - .gitignore
+  - "*.zip"
