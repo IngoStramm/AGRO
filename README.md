@@ -31,6 +31,7 @@ Do not use GitHub's green **Code > Download ZIP** button for installation. That 
 - Rearms after the player drops below 75%.
 - Sends warnings to `/say` by default.
 - Uses an 8 second global delay and a 30 second per-player cooldown.
+- Uses localized UI text for WoW-supported client locales. `enGB` uses the `enUS` text.
 
 Default warning format:
 

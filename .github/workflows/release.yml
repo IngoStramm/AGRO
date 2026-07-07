@@ -23,7 +23,16 @@ jobs:
           cp AGRO.toc package/AGRO/
           cp AGRO.lua package/AGRO/
           cp enUS.lua package/AGRO/
+          cp deDE.lua package/AGRO/
+          cp esES.lua package/AGRO/
+          cp esMX.lua package/AGRO/
+          cp frFR.lua package/AGRO/
+          cp itIT.lua package/AGRO/
+          cp koKR.lua package/AGRO/
           cp ptBR.lua package/AGRO/
+          cp ruRU.lua package/AGRO/
+          cp zhCN.lua package/AGRO/
+          cp zhTW.lua package/AGRO/
           cd package
           zip -r ../AGRO.zip AGRO
 

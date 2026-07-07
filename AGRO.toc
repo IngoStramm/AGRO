@@ -1,12 +1,30 @@
 ## Interface: 20505
 ## Title: AGRO - Aggro Guard and Raid Observer
 ## Notes: Warns when a group member is close to pulling threat from your active tank target.
+## Notes-deDE: Warnt, wenn ein Gruppenmitglied kurz davor ist, Bedrohung von deinem getankten Ziel zu ziehen.
+## Notes-esES: Avisa cuando un miembro del grupo esta cerca de quitarte la amenaza de tu objetivo tanqueado.
+## Notes-esMX: Avisa cuando un miembro del grupo esta cerca de quitarte la amenaza de tu objetivo tanqueado.
+## Notes-frFR: Avertit lorsqu'un membre du groupe est proche de reprendre la menace sur votre cible tankee.
+## Notes-itIT: Avvisa quando un membro del gruppo e vicino a superare la tua minaccia sul bersaglio tankato.
+## Notes-koKR: 파티원이 탱킹 중인 대상의 위협을 빼앗을 것 같으면 경고합니다.
 ## Notes-ptBR: Avisa quando um membro do grupo esta perto de puxar ameaca do seu alvo tankado.
+## Notes-ruRU: Предупреждает, когда участник группы близок к срыву угрозы с вашей танкуемой цели.
+## Notes-zhCN: 当队伍成员即将从你正在坦克的目标上抢走仇恨时发出警告。
+## Notes-zhTW: 當隊伍成員即將從你正在坦克的目標上搶走仇恨時發出警告。
 ## Author: Ingo Stramm
-## Version: 0.1.5
+## Version: 0.1.6
 ## SavedVariablesPerCharacter: AGRODB
 ## DefaultState: enabled
 
 enUS.lua
+deDE.lua
+esES.lua
+esMX.lua
+frFR.lua
+itIT.lua
+koKR.lua
 ptBR.lua
+ruRU.lua
+zhCN.lua
+zhTW.lua
 AGRO.lua
